@@ -17,6 +17,7 @@ use rand::Rng;
 use std::cmp::Ordering;
 use std::io;
 
+pub mod augmentation;
 pub mod random_data;
 
 /// The version of the crate.
