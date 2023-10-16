@@ -1,38 +1,29 @@
 name: Tests
 
-on: [push]
+on:
+  workflow_call:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+    branches:
+        - main
+
+permissions:
+  contents: read
 
 jobs:
   pre-commit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: PyO3/maturin-action@v1
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-      - uses: pre-commit/action@v3.0.0
+    uses: ./.github/workflows/pre-commit.yml
 
-  tests:
-    runs-on: ubuntu-latest
+  linux:
     needs: pre-commit
-    steps:
-      - uses: actions/checkout@v3
-      - uses: PyO3/maturin-action@v1
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-      - name: Setup Python Venv
-        run: |
-          pip install --upgrade pip
-          python3.9 -m venv .venv
-          source .venv/bin/activate
-          echo "VIRTUAL ENV:" $VIRTUAL_ENV
-      - name: Build and test
-        run: maturin develop --release --extras=dev
-      - name: Rust tests
-        run: cargo test --release
-      - name: Python tests
-        run: |
-          pip install pytest
-          pytest
+    uses: ./.github/workflows/tests-linux.yml
+
+  macos:
+    needs: pre-commit
+    uses: ./.github/workflows/tests-macos.yml
+
+  windows:
+    needs: pre-commit
+    uses: ./.github/workflows/tests-windows.yml
