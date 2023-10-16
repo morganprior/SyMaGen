@@ -27,17 +27,17 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install | Poetry
-        uses: abatilo/actions-poetry@v2
-      - name: Poetry | Config
-        run: |
-          poetry config virtualenvs.create true --local
-          poetry config virtualenvs.in-project true --local
-      - name: Poetry | Cache
-        uses: actions/cache@v3
-        with:
-          path: ./.venv
-          key: venv-windows-${{ hashFiles('poetry.lock') }}
+      # - name: Install | Poetry
+      #   uses: abatilo/actions-poetry@v2
+      # - name: Poetry | Config
+      #   run: |
+      #     poetry config virtualenvs.create true --local
+      #     poetry config virtualenvs.in-project true --local
+      # - name: Poetry | Cache
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ./.venv
+      #     key: venv-windows-${{ hashFiles('poetry.lock') }}
       - name: Poetry | Install
         run: poetry run poetry install --no-interaction
       - name: Maturin | Develop
